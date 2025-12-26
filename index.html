@@ -1,0 +1,130 @@
+import React, { useState, useEffect } from 'react';
+
+/**
+ * INSTRUCCIONES PARA GITHUB/WEB:
+ * Para que las fotos se vean fuera de este chat, debes reemplazar las strings 
+ * en el array PHOTOS con las URLs reales de tus imágenes después de subirlas 
+ * a un servidor (como Imbb, PostImages o tu propio repo de GitHub).
+ */
+
+const PHOTOS = [
+  "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000", // Reemplazar con tu Foto 1
+  "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?q=80&w=1000", // Reemplazar con tu Foto 2
+  "https://images.unsplash.com/photo-1516589174184-c6852657d803?q=80&w=1000", // Reemplazar con tu Foto 3
+  "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?q=80&w=1000", // Reemplazar con tu Foto 4
+  "https://images.unsplash.com/photo-1529634806980-85c3dd6d34ac?q=80&w=1000", // Reemplazar con tu Foto 5
+  "https://images.unsplash.com/photo-1531746020798-e7953e3e8c5c?q=80&w=1000", // Reemplazar con tu Foto 6
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000", // Reemplazar con tu Foto 7
+  "https://images.unsplash.com/photo-1522673607200-1648832cee98?q=80&w=1000", // Reemplazar con tu Foto 8
+  "https://images.unsplash.com/photo-1516589174184-c6852657d803?q=80&w=1000", // Reemplazar con tu Foto 9
+  "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000"  // Reemplazar con tu Foto 10
+];
+
+const SparkleIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4b499" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3c.5 3 2 4.5 5 5-3 .5-4.5 2-5 5-.5-3-2-4.5-5-5 3-.5 4.5-2 5-5Z" />
+  </svg>
+);
+
+export default function App() {
+  const [isVisible, setIsVisible] = useState({});
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('.reveal-section').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="bg-[#0a0a0a] text-white font-serif selection:bg-[#d4b499] selection:text-black scroll-smooth">
+      {/* Portada */}
+      <section id="hero" className="reveal-section relative h-screen flex items-center justify-center overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] ease-out"
+          style={{ 
+            backgroundImage: `url(${PHOTOS[0]})`, 
+            filter: 'brightness(0.35)',
+            transform: isVisible['hero'] ? 'scale(1)' : 'scale(1.15)'
+          }}
+        />
+        <div className={`relative z-10 text-center px-6 transition-all duration-[2s] ${isVisible['hero'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <p className="text-[#d4b499] text-[10px] uppercase tracking-[0.8em] mb-8">Un regalo para Vanessa</p>
+          <h1 className="text-4xl md:text-7xl font-light leading-tight max-w-4xl mx-auto">
+            Vanessa, hay cosas que no se explican... <span className="italic">se sienten.</span>
+          </h1>
+        </div>
+      </section>
+
+      {/* Momento 1 */}
+      <section id="sec-1" className="reveal-section py-32 md:py-48 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+        <div className={`transition-all duration-[1.5s] ${isVisible['sec-1'] ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
+          <img src={PHOTOS[1]} alt="Vanessa" className="w-full h-[70vh] object-cover rounded-sm grayscale hover:grayscale-0 transition-all duration-1000 shadow-2xl" />
+        </div>
+        <div className={`transition-all duration-[1.5s] delay-300 ${isVisible['sec-1'] ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <h2 className="text-5xl text-[#d4b499] mb-8 font-light italic text-right md:text-left">El primer brillo</h2>
+          <p className="text-white/60 font-sans font-light leading-relaxed text-xl">
+            A veces el tiempo se detiene. No importa dónde estemos, si es contigo, sé que estoy en el lugar correcto.
+          </p>
+        </div>
+      </section>
+
+      {/* Mosaico */}
+      <section className="py-24 bg-[#050505]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 max-w-7xl mx-auto">
+          {[PHOTOS[3], PHOTOS[4], PHOTOS[5], PHOTOS[6]].map((img, i) => (
+            <div key={i} id={`mos-${i}`} className="reveal-section aspect-[3/4] overflow-hidden">
+              <img src={img} className={`w-full h-full object-cover transition-all duration-[2s] ${isVisible[`mos-${i}`] ? 'opacity-100' : 'opacity-0 scale-110'}`} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Cómplices */}
+      <section id="sec-2" className="reveal-section py-32 md:py-48 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+        <div className="md:order-2">
+           <img src={PHOTOS[7]} alt="Nosotros" className="w-full h-[70vh] object-cover rounded-sm" />
+        </div>
+        <div className="md:order-1">
+          <h2 className="text-5xl text-[#d4b499] mb-8 font-light italic">Cómplices</h2>
+          <p className="text-white/60 font-sans font-light leading-relaxed text-xl">
+            Encontré en tu risa el refugio que no sabía que estaba buscando.
+          </p>
+        </div>
+      </section>
+
+      {/* Botón Final */}
+      <section className="py-48 text-center bg-black">
+        <button onClick={() => setShowModal(true)} className="p-12 border border-[#d4b499]/20 rounded-full hover:scale-110 transition-transform">
+          <SparkleIcon />
+        </button>
+      </section>
+
+      {/* Modal Sorpresa */}
+      {showModal && (
+        <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-6" onClick={() => setShowModal(false)}>
+          <div className="max-w-2xl w-full text-center" onClick={e => e.stopPropagation()}>
+            <img src={PHOTOS[9]} className="max-h-[60vh] mx-auto rounded-sm mb-8 shadow-2xl" />
+            <h2 className="text-3xl text-[#d4b499] font-light">Eres mi mejor decisión.</h2>
+            <button className="mt-8 text-white/30 text-[10px] tracking-widest uppercase">Cerrar</button>
+          </div>
+        </div>
+      )}
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .reveal-section { transition: opacity 1.5s ease-out, transform 1.5s ease-out; }
+        html { background: #0a0a0a; }
+      `}} />
+    </div>
+  );
+}
